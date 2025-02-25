@@ -55,18 +55,17 @@ public class BrokenLinks {
 					"In this case, clicking the link will return a response code of 404 (Not Found). You could write an automated test that checks for the expected response code of 200.",
 					element.getText());
 			element = driver.findElement(By.xpath("//*[@id=\"post-1267\"]/div/figure/table/thead/tr/th[1]"));
-			assertEquals("Name",element.getText());
-			
+			assertEquals("Name", element.getText());
+
 			element = driver.findElement(By.xpath("//*[@id=\"post-1267\"]/div/figure/table/thead/tr/th[2]"));
-			assertEquals("Status",element.getText());
-			
+			assertEquals("Status", element.getText());
+
 			element = driver.findElement(By.xpath("//*[@id=\"post-1267\"]/div/figure/table/tbody/tr/td[1]"));
 			assertEquals("missing-page.html", element.getText());
-			
+
 			element = driver.findElement(By.xpath("//*[@id=\"post-1267\"]/div/figure/table/tbody/tr/td[2]"));
 			assertEquals("404", element.getText());
-			
-			
+
 		} catch (Error e) {
 			verificationErrors.append(e.toString());
 		}
