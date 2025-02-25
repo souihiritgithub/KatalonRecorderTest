@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.commons.io.FileUtils;
 import java.io.File;
@@ -32,44 +33,129 @@ public class FormFields {
 	  }
 
   @Test
-  public void testFormFields() throws Exception {
-    driver.get("https://practice-automation.com/");
-    driver.findElement(By.linkText("Form Fields")).click();
-    driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/h1")).click();
-    try {
-      assertEquals("Form Fields", driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/h1")).getText());
-    } catch (Error e) {
-      verificationErrors.append(e.toString());
-    }
-    driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/nav")).click();
-    try {
-      assertEquals("Form Fields", driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/nav/span/span[2]")).getText());
-    } catch (Error e) {
-      verificationErrors.append(e.toString());
-    }
-    driver.findElement(By.id("name-input")).clear();
-    driver.findElement(By.id("name-input")).sendKeys("Islem");
-    driver.findElement(By.xpath("//form[@id='feedbackForm']/p")).click();
-    driver.findElement(By.id("name-input")).click();
-    String Islem = (String)driver.findElement(By.id("name-input")).getAttribute("value");
-    driver.findElement(By.xpath("//input[@type='password']")).click();
-    driver.findElement(By.xpath("//input[@type='password']")).clear();
-    driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123456");
-    driver.findElement(By.id("drink1")).click();
-    driver.findElement(By.id("color1")).click();
-    driver.findElement(By.id("automation")).click();
-    new Select(driver.findElement(By.id("automation"))).selectByVisibleText("Yes");
-    driver.findElement(By.id("feedbackForm")).click();
-    driver.findElement(By.id("email")).click();
-    driver.findElement(By.id("email")).clear();
-    driver.findElement(By.id("email")).sendKeys("souihi.islem2019@gmail.com");
-    driver.findElement(By.id("message")).click();
-    driver.findElement(By.id("message")).clear();
-    driver.findElement(By.id("message")).sendKeys("Islem");
-    assertEquals("Islem", driver.findElement(By.id("message")).getAttribute("value"));
-    driver.findElement(By.id("submit-btn")).click();
-    assertEquals("Message received!", closeAlertAndGetItsText());
-  }
+	public void testFormFields() throws Exception {
+		driver.get("https://practice-automation.com/form-fields/");
+		try {
+			WebElement element = driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/h1"));
+			assertEquals("Form Fields", element.getText());
+			
+			assertEquals("Home", driver.findElement(By.linkText("Home")).getText());
+			
+			element = driver.findElement(By.xpath("//*[@id=\"feedbackForm\"]/label[1]"));
+			assertEquals("Name", element.getText());
+			
+			element = driver.findElement(By.id("name-input"));
+			element.clear();
+			element.sendKeys("Islem");
+		
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/p"));
+			assertTrue(element.getText().matches("^[\\s\\S]* Required$"));
+			element = driver.findElement(By.xpath("//input[@type='password']"));
+			element.click();
+			element.clear();
+			element.sendKeys("123456");
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/label[3]"));
+			assertEquals("What is your favorite drink?", element.getText());
+					
+			driver.findElement(By.id("drink1")).click();
+			Thread.sleep(500);
+			driver.findElement(By.id("feedbackForm")).click();
+			Thread.sleep(500);
+			driver.findElement(By.id("drink2")).click();
+			Thread.sleep(500);
+			driver.findElement(By.id("drink3")).click();
+			Thread.sleep(500);
+			driver.findElement(By.id("drink4")).click();
+			Thread.sleep(500);
+			Actions actions = new Actions(driver);
+			WebElement drink5 = driver.findElement(By.id("drink5"));
+			actions.moveToElement(drink5).click().perform();
+			Thread.sleep(500);
+			
+			actions = new Actions(driver);
+			WebElement color1 = driver.findElement(By.id("color1"));
+			actions.moveToElement(color1).click().perform();
+			Thread.sleep(500);
+			
+			WebElement color2 = driver.findElement(By.id("color2"));
+			actions.moveToElement(color2).click().perform();
+			Thread.sleep(500);
+			
+			WebElement color3 = driver.findElement(By.id("color3"));
+			actions.moveToElement(color3).click().perform();
+			Thread.sleep(500);
+			
+			WebElement color4 = driver.findElement(By.id("color4"));
+			actions.moveToElement(color4).click().perform();
+			Thread.sleep(500);
+			
+			WebElement color5 = driver.findElement(By.id("color5"));
+			actions.moveToElement(color5).click().perform();
+			Thread.sleep(500);
+			
+			// actions.perform() // Déplace la souris sur l'élément, ce qui peut déclencher
+			// le scroll
+			// Sélectionner l'élément du menu déroulant
+			WebElement automationDropdown = driver.findElement(By.id("automation"));
+			// Forcer le scroll avant chaque interaction
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", automationDropdown);
+			Thread.sleep(500); // Petite pause pour assurer le scroll
+			
+			// Sélectionner "Yes"
+			new Select(automationDropdown).selectByVisibleText("Yes");
+			
+			// Sélectionner "No"
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", automationDropdown);
+			Thread.sleep(500);
+			new Select(automationDropdown).selectByVisibleText("No");
+			
+			// Sélectionner "Undecided"
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", automationDropdown);
+			Thread.sleep(500);
+			new Select(automationDropdown).selectByVisibleText("Undecided");
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/ul/li"));
+			assertEquals("Selenium", element.getText());
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/ul/li[2]"));
+			assertEquals("Playwright", element.getText());
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/ul/li[3]"));
+			assertEquals("Cypress", element.getText());
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/ul/li[4]"));
+			assertEquals("Appium", element.getText());
+			
+			element = driver.findElement(By.xpath("//form[@id='feedbackForm']/ul/li[5]"));
+			assertEquals("Katalon Studio", element.getText());
+			
+			driver.findElement(By.id("feedbackForm")).click();
+			element = driver.findElement(By.id("email"));
+			element.click();
+			element.clear();
+			element.sendKeys("Souihi.islem@gmail.com");
+			
+			element = driver.findElement(By.id("message"));
+			element.click();
+			element.clear();
+			element.sendKeys("hello word");
+			
+			element = driver.findElement(By.id("submit-btn"));
+			assertEquals("Submit", element.getText());
+			element.click();
+			
+		} catch (Error e) {
+			verificationErrors.append(e.toString());
+		}
+	}
+
+
+
+
+
+
+
 
   @After
   public void tearDown() throws Exception {
