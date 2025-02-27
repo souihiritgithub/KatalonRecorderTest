@@ -24,6 +24,7 @@ public class ClickEvents {
 	private boolean acceptNextAlert = true;
 	private StringBuffer verificationErrors = new StringBuffer();
 	JavascriptExecutor js;
+	ClickEventsPage clickEvents; 
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,21 +36,33 @@ public class ClickEvents {
 		baseUrl = "https://practice-automation.com/";
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		js = (JavascriptExecutor) driver;
+		clickEvents = new ClickEventsPage(driver);
 	}
 
 	@Test
 	public void testClickEvents() throws Exception {
 		driver.get("https://practice-automation.com/click-events/");
 		try {
-			WebElement element = driver.findElement(By.xpath("//*[@id=\"top-wrap\"]/section/div/h1"));
-			assertEquals("Click Events", element.getText());
+			assertEquals("Click Events", clickEvents.getClickEventsTitle().getText());
 
-			WebElement btn = driver
+			clickEvents.getBtnCat().click();
+            assertEquals("Meow!", clickEvents.getMsgCat().getText());
+            
+            clickEvents.getBtnDog().click();
+            assertEquals("Woof!", clickEvents.getMsgDog().getText());
+            
+            clickEvents.getBtnPig().click();
+            assertEquals("Oink!", clickEvents.getMsgPig().getText());
+            
+            clickEvents.getBtnCow().click();
+            assertEquals("Moo!", clickEvents.getMsgCow().getText());
+            
+            
+			/*WebElement btn = driver
 					.findElement(By.xpath("//*[@id=\"post-3145\"]/div/div[3]/div/div/div/div[1]/button"));
 			btn.click();
 			element = driver.findElement(By.id("demo"));
 			assertEquals("Meow!", element.getText());
-
 			btn = driver.findElement(By.xpath("//button[@onclick='dogSound()']"));
 			btn.click();
 			element = driver.findElement(By.id("demo"));
@@ -64,6 +77,7 @@ public class ClickEvents {
 			btn.click();
 			element = driver.findElement(By.id("demo"));
 			assertEquals("Moo!", element.getText());
+			*/
 
 		} catch (Error e) {
 			verificationErrors.append(e.toString());

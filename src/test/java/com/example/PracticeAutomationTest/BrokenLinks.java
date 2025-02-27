@@ -1,10 +1,10 @@
 package com.example.PracticeAutomationTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.time.Duration;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -24,6 +23,7 @@ public class BrokenLinks {
 	private boolean acceptNextAlert = true;
 	private StringBuffer verificationErrors = new StringBuffer();
 	JavascriptExecutor js;
+	BrokenLinksPage BrokenLinks;
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,10 +35,45 @@ public class BrokenLinks {
 		baseUrl = "https://practice-automation.com/";
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		js = (JavascriptExecutor) driver;
+		BrokenLinks = new BrokenLinksPage(driver);
 	}
 
 	@Test
 	public void testBrokenLinks() throws Exception {
+		driver.get("https://practice-automation.com/broken-links/");
+		try {
+			// Broken Links : Titre de la page (Action)
+			// Point de Verification: Résultat attendu
+			
+			//assertTrue(message d'erreur, condition )
+			assertTrue("Le logo n'est pas affiché", BrokenLinks.getLogo().isDisplayed());
+			
+			assertEquals("HTTP response code", BrokenLinks.getHTTPResponseCodeText().getText());
+			
+			assertEquals("Broken Links", BrokenLinks.getbrokenLinksTitle().getText());
+			
+			assertEquals("Home", BrokenLinks.getHomeText().getText());
+			
+			assertEquals("In an ideal scenario a website should have no broken links. Therefore, it’s important to ensure that all links are working properly. One way to do that is to verify that the HTTP response code is 200 when the link is clicked.",
+					BrokenLinks.getIdealScenarioText().getText());
+			
+			assertEquals("Name", BrokenLinks.getNameText().getText());
+			
+			assertEquals("missing-page.html", BrokenLinks.getMissingPageText().getText());
+			
+			assertEquals("Status", BrokenLinks.getStatusText().getText());
+			
+			assertEquals("404", BrokenLinks.getQuatreCentQuatrePageText().getText());
+			
+			assertEquals(2,BrokenLinks.getNombreCode200().size());
+		
+		} catch (Error e) {
+			verificationErrors.append(e.toString());
+		}
+	}
+	
+	/*@Test
+	/*public void testBrokenLinks() throws Exception {
 		driver.get("https://practice-automation.com/broken-links/");
 		try {
 			WebElement element = driver.findElement(By.xpath("//div[@id='top-wrap']/section/div/h1"));
@@ -75,7 +110,7 @@ public class BrokenLinks {
 			verificationErrors.append(e.toString());
 		}
 	}
-
+*/
 	@After
 	public void tearDown() throws Exception {
 		driver.quit();
